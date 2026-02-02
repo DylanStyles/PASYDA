@@ -11,3 +11,7 @@ Uses behvaioural metadata to generate labels.
 
 import pandas as pd
 from pathlib import Path
+
+YES = "yes"
+NO = "no"
+ LABEL_COL = "grooming_label"
