@@ -40,3 +40,8 @@ if "ID" not in victim_df.columns:
     victim_df.to_csv(out_path, index=False)
 
     return out_path
+
+# Dataset pairing
+def find pairs(dataset_dir: Path):
+ victims = sorted(dataset_dir.glob("perp_*_vic_data.csv"))
+    pairs = []
