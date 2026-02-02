@@ -56,6 +56,7 @@ for vic in victims:
             print(f"[ERROR] Missing solutions file for {vic.name}")
 
     return pairs
+
 # Main with helper functions
 def main():
     dataset_dir = Path("Dataset")
@@ -65,3 +66,24 @@ def main():
         raise FileNotFoundError(
             "Expected a 'Dataset' folder in the repository root."
         )
+pairs = find_pairs(dataset_dir)
+    if not pairs:
+        raise FileNotFoundError(
+            "No perp_*_vic_data.csv files found in Dataset/"
+        )
+
+    labelled_frames = []
+
+    for victim_csv, solutions_csv in pairs:
+        out_path = label_victim_file(victim_csv, solutions_csv, out_dir)
+        print(f"[OK] Labelled {victim_csv.name} -> {out_path}")
+        labelled_frames.append(pd.read_csv(out_path))
+
+    combined = pd.concat(labelled_frames, ignore_index=True)
+    combined_out = out_dir / "all_victims_labelled.csv"
+    combined.to_csv(combined_out, index=False)
+
+    print(f"[OK] Combined labelled dataset saved to: {combined_out}")
+
+if __name__ == "__main__":
+    main()
