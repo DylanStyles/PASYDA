@@ -14,4 +14,29 @@ from pathlib import Path
 
 YES = "yes"
 NO = "no"
- LABEL_COL = "grooming_label"
+LABEL_COL = "grooming_label"
+
+def label_victim_file(victim_csv: Path, solutions_csv: Path, out_dir: Path) -> Path:
+ """
+ Labels row YES if ID is in solution file.
+ """
+ victim_df = pd.read_csv(victim_csv)
+ sol_df = pd.read_csv(solutions_csv)
+
+if "ID" not in victim_df.columns:
+        raise KeyError(f"{victim_csv.name} missing required column: ID")
+    if "ID" not in sol_df.columns:
+        raise KeyError(f"{solutions_csv.name} missing required column: ID")
+
+    solution_ids = set(sol_df["ID"].astype(str))
+    victim_ids = victim_df["ID"].astype(str)
+
+    victim_df[LABEL_COL] = victim_ids.apply(
+        lambda x: YES if x in solution_ids else NO
+    )
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_path = out_dir / f"{victim_csv.stem}_labelled.csv"
+    victim_df.to_csv(out_path, index=False)
+
+    return out_path
