@@ -45,3 +45,15 @@ if "ID" not in victim_df.columns:
 def find pairs(dataset_dir: Path):
  victims = sorted(dataset_dir.glob("perp_*_vic_data.csv"))
     pairs = []
+
+for vic in victims:
+        prefix = vic.name.replace("_vic_data.csv", "")
+        sol = dataset_dir / f"{prefix}_solutions.csv"
+
+        if sol.exists():
+            pairs.append((vic, sol))
+        else:
+            print(f"[ERROR] Missing solutions file for {vic.name}")
+
+    return pairs
+
