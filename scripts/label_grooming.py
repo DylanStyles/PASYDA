@@ -56,4 +56,12 @@ for vic in victims:
             print(f"[ERROR] Missing solutions file for {vic.name}")
 
     return pairs
+# Main with helper functions
+def main():
+    dataset_dir = Path("Dataset")
+    out_dir = Path("outputs")
 
+    if not dataset_dir.exists():
+        raise FileNotFoundError(
+            "Expected a 'Dataset' folder in the repository root."
+        )
